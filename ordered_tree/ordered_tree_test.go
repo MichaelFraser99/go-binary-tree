@@ -22,7 +22,7 @@ func (c *IntComparison) Equals(newValue any) bool {
 	return c.Value.(int) == newValue.(int)
 }
 
-func (c *IntComparison) Clone() C {
+func (c *IntComparison) New() C {
 	return &IntComparison{}
 }
 
@@ -82,7 +82,7 @@ func (c *StringComparison) Equals(newValue any) bool {
 	return c.Value.(string) == newValue.(string)
 }
 
-func (c *StringComparison) Clone() C {
+func (c *StringComparison) New() C {
 	return &StringComparison{}
 }
 
@@ -180,7 +180,7 @@ func (c *ComplexObjectComparison) Equals(newValue any) bool {
 	return c.Value.(ComplexObject).priority == newValue.(ComplexObject).priority && c.Value.(ComplexObject).createdDate.Equal(newValue.(ComplexObject).createdDate)
 }
 
-func (c *ComplexObjectComparison) Clone() C {
+func (c *ComplexObjectComparison) New() C {
 	return &ComplexObjectComparison{}
 }
 

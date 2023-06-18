@@ -11,7 +11,7 @@ type OrderedNode struct {
 }
 
 func New(val any, impl C) *OrderedNode {
-	newImpl := impl.Clone()
+	newImpl := impl.New()
 	newImpl.GetContents().SetValue(val)
 	newImpl.GetContents().SetCount(1)
 	return &OrderedNode{
@@ -20,7 +20,7 @@ func New(val any, impl C) *OrderedNode {
 }
 
 type C interface {
-	Clone() C
+	New() C // Creates a new instance of the defined implementation
 	GetContents() *Contents
 	Compare(newValue any) bool // Should return true for greater than, and false for less than
 	Equals(value any) bool
