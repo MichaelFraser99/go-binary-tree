@@ -138,3 +138,11 @@ fmt.Println(ascList)
 ]
 */
 ```
+## Functionality
+Once you have your tree constructed, you can use the following functions to interact with it:
+```go
+tree.Add(value) // Adds a value to the tree
+tree.Remove(value) // Removes one instance of value from the tree. Returns error if this would result in an empty tree
+tree.AscList() // Returns a list of the values in the tree in ascending order
+tree.DescList() // Returns a list of the values in the tree in descending order
+tree.Find(value) // Returns the specified value if the tree contains it, otherwise nil

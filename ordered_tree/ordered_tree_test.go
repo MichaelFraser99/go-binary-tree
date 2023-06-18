@@ -68,6 +68,34 @@ func TestOrderedNode_AddInt(t *testing.T) {
 	assert.Equal(t, 1, descList[2])
 	assert.Equal(t, 0, descList[3])
 
+	// Test finding a node
+	foundValue := tree.Find(2)
+	require.NotNil(t, foundValue)
+	require.Equal(t, 2, foundValue)
+
+	foundValue = tree.Find(19)
+	require.Nil(t, foundValue)
+
+	// Test removing a node
+	require.Nil(t, tree.Remove(1))
+	descList = tree.DescList()
+	assert.Len(t, descList, 3)
+	assert.Equal(t, 2, descList[0])
+	assert.Equal(t, 2, descList[1])
+	assert.Equal(t, 0, descList[2])
+
+	require.Nil(t, tree.Remove(2))
+	descList = tree.DescList()
+	assert.Len(t, descList, 2)
+	assert.Equal(t, 2, descList[0])
+	assert.Equal(t, 0, descList[1])
+
+	require.Nil(t, tree.Remove(0))
+	descList = tree.DescList()
+	assert.Len(t, descList, 1)
+	assert.Equal(t, 2, descList[0])
+
+	require.Error(t, tree.Remove(2), "cannot remove last value in tree")
 }
 
 type StringComparison struct {
@@ -122,25 +150,97 @@ func TestOrderedNode_AddString(t *testing.T) {
 	assert.Equal(t, "d", tree.Left.Right.Contents.GetContents().Value)
 	assert.Equal(t, 1, tree.Left.Right.Contents.GetContents().Count)
 
+	tree.Add("a")
+	assert.Equal(t, "m", tree.Contents.GetContents().Value)
+	assert.Equal(t, 1, tree.Contents.GetContents().Count)
+	assert.Equal(t, "c", tree.Left.Contents.GetContents().Value)
+	assert.Equal(t, 2, tree.Left.Contents.GetContents().Count)
+	assert.Equal(t, "a", tree.Left.Left.Contents.GetContents().Value)
+	assert.Equal(t, 1, tree.Left.Left.Contents.GetContents().Count)
+	assert.Equal(t, "z", tree.Right.Contents.GetContents().Value)
+	assert.Equal(t, 1, tree.Right.Contents.GetContents().Count)
+	assert.Equal(t, "d", tree.Left.Right.Contents.GetContents().Value)
+	assert.Equal(t, 1, tree.Left.Right.Contents.GetContents().Count)
+
 	ascList := tree.AscList()
 	require.NotNil(t, ascList)
 	fmt.Println(ascList)
-	assert.Len(t, ascList, 5)
-	assert.Equal(t, "c", ascList[0])
+	assert.Len(t, ascList, 6)
+	assert.Equal(t, "a", ascList[0])
 	assert.Equal(t, "c", ascList[1])
-	assert.Equal(t, "d", ascList[2])
-	assert.Equal(t, "m", ascList[3])
-	assert.Equal(t, "z", ascList[4])
+	assert.Equal(t, "c", ascList[2])
+	assert.Equal(t, "d", ascList[3])
+	assert.Equal(t, "m", ascList[4])
+	assert.Equal(t, "z", ascList[5])
 
 	descList := tree.DescList()
 	require.NotNil(t, descList)
+	fmt.Println(descList)
+	assert.Len(t, descList, 6)
+	assert.Equal(t, "z", descList[0])
+	assert.Equal(t, "m", descList[1])
+	assert.Equal(t, "d", descList[2])
+	assert.Equal(t, "c", descList[3])
+	assert.Equal(t, "c", descList[4])
+	assert.Equal(t, "a", descList[5])
+
+	// Test finding a node
+	foundValue := tree.Find("m")
+	require.NotNil(t, foundValue)
+	require.Equal(t, "m", foundValue)
+
+	foundValue = tree.Find("q")
+	require.Nil(t, foundValue)
+
+	// Test removing a node
+	require.Nil(t, tree.Remove("c"))
+	descList = tree.DescList()
 	fmt.Println(descList)
 	assert.Len(t, descList, 5)
 	assert.Equal(t, "z", descList[0])
 	assert.Equal(t, "m", descList[1])
 	assert.Equal(t, "d", descList[2])
 	assert.Equal(t, "c", descList[3])
-	assert.Equal(t, "c", descList[4])
+	assert.Equal(t, "a", descList[4])
+
+	require.Nil(t, tree.Remove("q"))
+	descList = tree.DescList()
+	fmt.Println(descList)
+	assert.Len(t, descList, 5)
+	assert.Equal(t, "z", descList[0])
+	assert.Equal(t, "m", descList[1])
+	assert.Equal(t, "d", descList[2])
+	assert.Equal(t, "c", descList[3])
+	assert.Equal(t, "a", descList[4])
+
+	require.Nil(t, tree.Remove("c"))
+	descList = tree.DescList()
+	fmt.Println(descList)
+	assert.Len(t, descList, 4)
+	assert.Equal(t, "z", descList[0])
+	assert.Equal(t, "m", descList[1])
+	assert.Equal(t, "d", descList[2])
+	assert.Equal(t, "a", descList[3])
+
+	require.Nil(t, tree.Remove("z"))
+	descList = tree.DescList()
+	assert.Len(t, descList, 3)
+	assert.Equal(t, "m", descList[0])
+	assert.Equal(t, "d", descList[1])
+	assert.Equal(t, "a", descList[2])
+
+	require.Nil(t, tree.Remove("m"))
+	descList = tree.DescList()
+	assert.Len(t, descList, 2)
+	assert.Equal(t, "d", descList[0])
+	assert.Equal(t, "a", descList[1])
+
+	require.Nil(t, tree.Remove("d"))
+	descList = tree.DescList()
+	assert.Len(t, descList, 1)
+	assert.Equal(t, "a", descList[0])
+
+	require.Error(t, tree.Remove("a"), "cannot remove last value in tree")
 }
 
 type ComplexObjectComparison struct {
@@ -272,4 +372,18 @@ func TestOrderedNode_AddComplexType(t *testing.T) {
 	assert.Equal(t, objP3N2, descList[2])
 	assert.Equal(t, objP5N1, descList[3])
 	assert.Equal(t, objP7N1, descList[4])
+
+	// Test finding a node
+	foundValue := tree.Find(objP3N1)
+	require.NotNil(t, foundValue)
+	require.Equal(t, objP3N1.id, foundValue.(ComplexObject).id)
+
+	foundValue = tree.Find(ComplexObject{
+		id:          uuid.New(),
+		priority:    9,
+		createdDate: time.Now(),
+		name:        "Object priority 9, 1",
+		description: "This is the first object with priority 9",
+	})
+	require.Nil(t, foundValue)
 }
